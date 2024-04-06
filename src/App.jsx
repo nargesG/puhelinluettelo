@@ -5,20 +5,21 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
+const baseUrl = 'http://localhost:3001/persons';
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filterString, setFilterString] = useState("");
 
-  const hook = () => {
+  const getPersonsFromServer = () => {
   axios
-    .get('http://localhost:3001/persons')
+    .get(baseUrl)
     .then(response => {
       setPersons(response.data)
     })
   }
 
-  useEffect(hook, [])
-  console.log('render', persons.length, 'persons')
+  useEffect(getPersonsFromServer, [])
 
   const handleSearchChange = (event) => {
     setFilterString(event.target.value);
@@ -32,10 +33,25 @@ const App = () => {
         name: newName,
         number: newNumber,
         important: Math.random() < 0.5,
-        id: persons.length + 1,
+        id: `${persons.length + 1}`,
       };
-      setPersons(persons.concat(newPerson));
+
+      
+      axios
+      .post(baseUrl, newPerson)
+      .then(response => response.data)
+      .then(person => {
+        setPersons(persons.concat(person));
+      })
     }
+
+//     const create = newObject => {
+//   const request = axios.post(baseUrl, newObject)
+//   return request.then(response => {
+//     return response.data
+//   })
+// }
+
   };
 
   return (
