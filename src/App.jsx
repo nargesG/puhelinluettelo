@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
-import axios from 'axios';
 import "./App.css";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import personService from "./services/persons";
 
-const baseUrl = 'http://localhost:3001/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filterString, setFilterString] = useState("");
 
   const getPersonsFromServer = () => {
-  axios
-    .get(baseUrl)
-    .then(response => {
-      setPersons(response.data)
+  personService
+    .getAll()
+    .then(persons => {
+      setPersons(persons)
     })
   }
 
@@ -36,13 +35,12 @@ const App = () => {
         id: `${persons.length + 1}`,
       };
 
-      
-      axios
-      .post(baseUrl, newPerson)
-      .then(response => response.data)
+      personService
+      .create(newPerson)
       .then(person => {
         setPersons(persons.concat(person));
       })
+      
     }
 
 //     const create = newObject => {
@@ -57,7 +55,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter filterString={filterString} onChange={handleSearchChange} />
+     <Filter filterString={filterString} onChange={handleSearchChange} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
       <h2>Numbers</h2>
