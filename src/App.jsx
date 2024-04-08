@@ -8,13 +8,11 @@ import Persons from "./components/Persons";
 import Notification from "./components/Notification";
 import personService from "./services/persons";
 
-
-
-
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filterString, setFilterString] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState(null)
 
 
   const getPersonsFromServer = () => {
@@ -45,13 +43,22 @@ const App = () => {
                 ? person 
                 : returnedPerson)
           )
-          setErrorMessage(
+          setMessage(
             `Changed ${person.name}'s number.`
           )
+          setMessageType("succes")
           setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-          
+            setMessage(null)
+          }, 5000)
+        })
+        .catch(() => {
+          setMessage(
+            `Information of ${person.name} has already been removed from server.`
+          )
+          setMessageType("error")
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
       }
     } else {
@@ -59,19 +66,17 @@ const App = () => {
         name: newName,
         number: newNumber,
         important: Math.random() < 0.5,
-        id: uuidv4()
-,
+        id: uuidv4(),
       };
 
       personService
       .create(newPerson)
       .then(person => {
         setPersons(persons.concat(person));
-        setErrorMessage(
-          `Added ${person.name}.`
-          )
+        setMessage(`Added ${person.name}.`);
+        setMessageType("succes");
         setTimeout(() => {
-          setErrorMessage(null)
+          setMessage(null)
         }, 5000)
       })
       
@@ -86,19 +91,23 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter(person =>  person.id !== id))
       })
-      .catch(error => {
-        console.error("Error removing person:", error);
+      .catch(() => {
+        setMessage(
+          `Information of ${name} has already been removed from server.`
+        )
+        setMessageType("error")
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       });
-    }
-   
-    
+    } 
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
-     <Filter filterString={filterString} onChange={handleSearchChange} />
+      <Notification message={message} type={messageType} />
+      <Filter filterString={filterString} onChange={handleSearchChange} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
       <h2>Numbers</h2>
