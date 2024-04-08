@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import "./App.css";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/persons";
+
 
 
 const App = () => {
@@ -32,7 +34,8 @@ const App = () => {
         name: newName,
         number: newNumber,
         important: Math.random() < 0.5,
-        id: `${persons.length + 1}`,
+        id: uuidv4()
+,
       };
 
       personService
@@ -42,15 +45,23 @@ const App = () => {
       })
       
     }
-
-//     const create = newObject => {
-//   const request = axios.post(baseUrl, newObject)
-//   return request.then(response => {
-//     return response.data
-//   })
-// }
-
   };
+
+  const removePerson = (id, name) => {
+    if (confirm(`Delete ${name}?`) == true) {
+      
+      personService
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter(person =>  person.id !== id))
+      })
+      .catch(error => {
+        console.error("Error removing person:", error);
+      });
+    }
+   
+    
+  }
 
   return (
     <div>
@@ -59,7 +70,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filterString={filterString} />
+      <Persons persons={persons} onRemove={removePerson} filterString={filterString}  />
     </div>
   );
 };
