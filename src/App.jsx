@@ -1,16 +1,21 @@
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import "./App.css";
+import "./index.css";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 import personService from "./services/persons";
+
 
 
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filterString, setFilterString] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null)
+
 
   const getPersonsFromServer = () => {
   personService
@@ -30,7 +35,7 @@ const App = () => {
     const person = persons.find((person) => person.name === newName);  
     if (person) {
       // alert(`${newName} is already in the phonebook!`);
-      if(confirm(`${newName} is already added to phonebook, replace the old number with a new one`)==true){
+      if(confirm(`${newName} is already added to phonebook, replace the old number with a new one.`)==true){
         personService
         .update(person.id, {...person, number: newNumber})
         .then(returnedPerson => {
@@ -40,6 +45,13 @@ const App = () => {
                 ? person 
                 : returnedPerson)
           )
+          setErrorMessage(
+            `Changed ${person.name}'s number.`
+          )
+          setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+          
         })
       }
     } else {
@@ -55,6 +67,12 @@ const App = () => {
       .create(newPerson)
       .then(person => {
         setPersons(persons.concat(person));
+        setErrorMessage(
+          `Added ${person.name}.`
+          )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
       
     }
@@ -79,6 +97,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
      <Filter filterString={filterString} onChange={handleSearchChange} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
