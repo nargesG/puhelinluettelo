@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import "./App.css";
 import "./index.css";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -104,11 +103,11 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>Phonebook</h2>
       <Notification message={message} type={messageType} />
       <Filter filterString={filterString} onChange={handleSearchChange} />
-      <h2>add a new</h2>
+      <h2>Add a new</h2>
       <PersonForm addPerson={addPerson} />
       <h2>Numbers</h2>
       <Persons persons={persons} onRemove={removePerson} filterString={filterString}  />

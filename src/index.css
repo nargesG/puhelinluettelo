@@ -1,3 +1,8 @@
+
+* {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
 .message {
   background: lightgrey;
   font-size: 20px;
@@ -13,4 +18,52 @@
 
 .succes {
   color: green;
+}
+
+.container {
+  position: relative;
+  margin: auto auto;
+  width: 80%;
+}
+
+.filterContainer {
+  width: 100%;
+  display: flex;
+}
+
+.button {
+  border-radius: .5rem;
+  height: 2rem;
+  width: 5rem;
+}
+
+.button:hover {
+  background-color: rgb(101, 101, 241);
+}
+
+.personItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+h4 {
+  margin: 0;
+  width: 30%;
+  line-height: 1.8rem;
+  vertical-align: middle;
+}
+
+input {
+  font-size: 1rem;
+  border-radius: .4rem;
+  line-height: 1.5rem;
 }

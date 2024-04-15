@@ -26,14 +26,16 @@ const PersonForm = ({ addPerson }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        name: <input value={newName} onChange={handleNameChange} />
+      <div className="formItem">
+        <h4>name:</h4>
+        <input value={newName} onChange={handleNameChange} />
+      </div>
+      <div className="formItem">
+        <h4>number:</h4>
+        <input value={newNumber} onChange={handleNumberChange} />
       </div>
       <div>
-        number: <input value={newNumber} onChange={handleNumberChange} />
-      </div>
-      <div>
-        <button type="submit">add</button>
+        <button type="submit" className="button">add</button>
       </div>
     </form>
   );
